@@ -1,0 +1,46 @@
+{% extends 'leaves/base.html' %}
+
+{% block title %}Teacher Dashboard - Leave Management{% endblock %}
+
+{% block header_title %}Teacher Dashboard{% endblock %}
+
+{% block content %}
+<div class="glass-card">
+    <h3>Staff Leave Requests</h3>
+    <div style="margin-top: 1rem; overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="text-align: left; background: #f1f5f9;">
+                    <th style="padding: 1rem;">Employee</th>
+                    <th style="padding: 1rem;">Date</th>
+                    <th style="padding: 1rem;">Reason</th>
+                    <th style="padding: 1rem;">Status</th>
+                    <th style="padding: 1rem;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in requests %}
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 1rem;">{{ request.employee_name }}</td>
+                    <td style="padding: 1rem;">{{ request.leave_date }}</td>
+                    <td style="padding: 1rem;">{{ request.reason|truncatechars:40 }}</td>
+                    <td style="padding: 1rem;">
+                         <span class="status-badge status-{{ request.status|lower }}">
+                            {{ request.status }}
+                        </span>
+                    </td>
+                    <td style="padding: 1rem; display: flex; gap: 0.5rem;">
+                        {% if request.status == 'Pending' %}
+                            <a href="{% url 'update_status' request.pk 'Approved' %}" class="button" style="background-color: var(--success); font-size: 0.75rem;">Approve</a>
+                            <a href="{% url 'update_status' request.pk 'Rejected' %}" class="button danger" style="font-size: 0.75rem;">Reject</a>
+                        {% else %}
+                            <span style="font-size: 0.75rem; color: var(--text-muted);">Resolved</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

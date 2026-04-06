@@ -1,0 +1,122 @@
+{% extends 'leaves/base.html' %}
+
+{% block title %}Request List - LeaveFlow{% endblock %}
+
+{% block header_title %}Leave Requests{% endblock %}
+
+{% block header_action %}
+<a href="{% url 'request_create' %}" class="button">Create New Request</a>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .table-container {
+        width: 100%;
+        overflow-x: auto;
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+    }
+
+    th {
+        padding: 1rem 1.5rem;
+        background-color: #f9fafb;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    td {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        font-size: 0.875rem;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        background-color: #f1f5f9;
+        color: #475569;
+    }
+
+    .actions {
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    .action-link {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.15s;
+    }
+
+    .action-link:hover {
+        color: var(--primary-hover);
+    }
+
+    .action-link.delete {
+        color: var(--danger);
+    }
+
+    .action-link.delete:hover {
+        color: #dc2626;
+    }
+
+    .empty-state {
+        padding: 4rem 2rem;
+        text-align: center;
+        color: var(--text-muted);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    {% if requests %}
+    <table>
+        <thead>
+            <tr>
+                <th>Employee</th>
+                <th>Leave Date</th>
+                <th>Reason</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for request in requests %}
+            <tr>
+                <td style="font-weight: 600;">{{ request.employee_name }}</td>
+                <td><span class="badge">{{ request.leave_date|date:"M d, Y" }}</span></td>
+                <td><p style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ request.reason }}</p></td>
+                <td class="actions">
+                    <a href="{% url 'request_update' request.pk %}" class="action-link">Edit</a>
+                    <a href="{% url 'request_delete' request.pk %}" class="action-link delete">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+        <p>No leave requests found. Click the button above to create one!</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
