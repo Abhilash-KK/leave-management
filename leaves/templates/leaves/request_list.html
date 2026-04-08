@@ -1,122 +1,213 @@
 {% extends 'leaves/base.html' %}
 
-{% block title %}Request List - LeaveFlow{% endblock %}
+{% block title %}Leave Dashboard - LeaveFlow{% endblock %}
 
-{% block header_title %}Leave Requests{% endblock %}
+{% block header_title %}Leave Management{% endblock %}
 
 {% block header_action %}
-<a href="{% url 'request_create' %}" class="button">Create New Request</a>
+<a href="{% url 'request_create' %}" class="button">
+    <i class="fas fa-plus" style="margin-right: 8px;"></i> New Request
+</a>
 {% endblock %}
 
 {% block extra_css %}
 <style>
-    .table-container {
-        width: 100%;
-        overflow-x: auto;
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 1.5rem;
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    .leave-card {
         background: white;
-        border-radius: 1rem;
-        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        text-align: left;
-    }
-
-    th {
-        padding: 1rem 1.5rem;
-        background-color: #f9fafb;
-        color: var(--text-muted);
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-        border-bottom: 1px solid var(--border-color);
-    }
-
-    td {
-        padding: 1.25rem 1.5rem;
-        border-bottom: 1px solid var(--border-color);
-        font-size: 0.875rem;
-    }
-
-    tr:last-child td {
-        border-bottom: none;
-    }
-
-    .badge {
-        display: inline-block;
-        padding: 0.25rem 0.5rem;
-        border-radius: 9999px;
-        font-size: 0.75rem;
-        font-weight: 500;
-        background-color: #f1f5f9;
-        color: #475569;
-    }
-
-    .actions {
+        border-radius: 1.25rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        border: 1px solid var(--border-color);
         display: flex;
-        gap: 0.75rem;
+        flex-direction: column;
+        gap: 1.25rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
     }
 
-    .action-link {
+    .leave-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        border-color: var(--primary-color);
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .student-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .avatar {
+        width: 48px;
+        height: 48px;
+        background: #f1f5f9;
         color: var(--primary-color);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        font-weight: 700;
+    }
+
+    .student-name {
+        font-weight: 700;
+        color: var(--text-main);
+        font-size: 1.125rem;
+        margin-bottom: 2px;
+    }
+
+    .leave-date {
+        font-size: 0.8125rem;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .card-body {
+        flex-grow: 1;
+    }
+
+    .reason-text {
+        font-size: 0.875rem;
+        color: #475569;
+        line-height: 1.6;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        padding: 0.75rem;
+        background: #f8fafc;
+        border-radius: 0.75rem;
+        position: relative;
+    }
+
+    .card-footer {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding-top: 1rem;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .card-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .card-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         text-decoration: none;
-        font-weight: 500;
-        transition: color 0.15s;
+        font-size: 0.875rem;
+        transition: all 0.2s;
+        border: 1px solid #e2e8f0;
+        color: var(--text-muted);
     }
 
-    .action-link:hover {
-        color: var(--primary-hover);
+    .card-btn:hover {
+        background: #f1f5f9;
+        color: var(--primary-color);
+        border-color: var(--primary-color);
     }
 
-    .action-link.delete {
-        color: var(--danger);
-    }
-
-    .action-link.delete:hover {
-        color: #dc2626;
+    .card-btn.delete:hover {
+        background: #f1f5f9;
+        color: #475569;
+        border-color: #475569;
     }
 
     .empty-state {
-        padding: 4rem 2rem;
+        grid-column: 1 / -1;
+        padding: 5rem 2rem;
         text-align: center;
-        color: var(--text-muted);
+        background: white;
+        border-radius: 1.5rem;
+        border: 2px dashed #e2e8f0;
+    }
+
+    .empty-icon {
+        font-size: 3rem;
+        color: #cbd5e1;
+        margin-bottom: 1.5rem;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="table-container">
+<div class="card-grid">
     {% if requests %}
-    <table>
-        <thead>
-            <tr>
-                <th>Employee</th>
-                <th>Leave Date</th>
-                <th>Reason</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for request in requests %}
-            <tr>
-                <td style="font-weight: 600;">{{ request.employee_name }}</td>
-                <td><span class="badge">{{ request.leave_date|date:"M d, Y" }}</span></td>
-                <td><p style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ request.reason }}</p></td>
-                <td class="actions">
-                    <a href="{% url 'request_update' request.pk %}" class="action-link">Edit</a>
-                    <a href="{% url 'request_delete' request.pk %}" class="action-link delete">Delete</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        {% for request in requests %}
+        <div class="leave-card" style="animation: slideUp 0.4s ease-out forwards; opacity: 0;">
+            <div class="card-header">
+                <div class="student-info">
+                    <div class="avatar">
+                        {{ request.student_name|first|upper }}
+                    </div>
+                    <div>
+                        <div class="student-name">{{ request.student_name }}</div>
+                        <div class="leave-date">
+                            <i class="far fa-calendar-alt"></i> {{ request.leave_date|date:"l, M d, Y" }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="reason-text">
+                    <i class="fas fa-quote-left" style="font-size: 0.75rem; opacity: 0.2; position: absolute; top: 8px; left: 8px;"></i>
+                    {{ request.reason }}
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <div class="card-actions">
+                    <a href="{% url 'request_update' request.pk %}" class="card-btn" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a href="{% url 'request_delete' request.pk %}" class="card-btn delete" title="Delete">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     {% else %}
-    <div class="empty-state">
-        <p>No leave requests found. Click the button above to create one!</p>
-    </div>
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-folder-open"></i>
+            </div>
+            <h3 style="margin-bottom: 0.5rem; color: var(--text-main);">No requests found</h3>
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">There are no leave requests yet.</p>
+            <a href="{% url 'request_create' %}" class="button">Create First Request</a>
+        </div>
     {% endif %}
 </div>
+
+<style>
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
 {% endblock %}

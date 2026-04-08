@@ -39,7 +39,7 @@
 {% block content %}
 <div class="delete-container">
     <h3>Are you sure?</h3>
-    <p>You are about to delete the leave request for <strong>{{ object.employee_name }}</strong> on <strong>{{ object.leave_date|date:"F d, Y" }}</strong>. This action cannot be undone.</p>
+    <p>You are about to delete the leave request for <strong>{{ object.student_name }}</strong> on <strong>{{ object.leave_date|date:"F d, Y" }}</strong>. This action cannot be undone.</p>
     
     <form method="post">
         {% csrf_token %}
