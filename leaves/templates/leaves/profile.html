@@ -1,0 +1,135 @@
+{% extends 'leaves/base.html' %}
+
+{% block title %}My Profile - LeaveFlow{% endblock %}
+{% block header_title %}Student Profile{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto; animation: slideUp 0.6s ease-out;">
+    <div class="glass-card" style="padding: 0; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.4);">
+        <!-- Profile Header -->
+        <div style="background: linear-gradient(135deg, var(--primary), var(--primary-dark)); padding: 3rem; color: white; display: flex; align-items: center; gap: 2rem;">
+            <div style="width: 100px; height: 100px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(8px); border: 4px solid rgba(255, 255, 255, 0.4); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 800;">
+                {{ user.username|first|upper }}
+            </div>
+            <div>
+                <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.25rem;">{{ user.username }}</h2>
+                <p style="opacity: 0.9; font-weight: 500; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-graduation-cap"></i> {{ user.profile.college_name|default:"College Not Set" }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Mode Toggle Area -->
+        <div style="padding: 3rem;">
+            <!-- View Mode -->
+            <div id="profile-view-mode">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-bottom: 3rem;">
+                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div>
+                            <label style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 0.5rem;">Username</label>
+                            <p style="font-size: 1.125rem; font-weight: 600; color: #1e293b;">@{{ user.username }}</p>
+                        </div>
+                        <div>
+                            <label style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 0.5rem;">College Name</label>
+                            <p style="font-size: 1.125rem; font-weight: 600; color: #1e293b;">{{ user.profile.college_name|default:"-" }}</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div>
+                            <label style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 0.5rem;">Department</label>
+                            <p style="font-size: 1.125rem; font-weight: 600; color: #1e293b;">{{ user.profile.department|default:"-" }}</p>
+                        </div>
+                        <div>
+                            <label style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 0.5rem;">Registration Number</label>
+                            <p style="font-size: 1.125rem; font-weight: 600; color: #1e293b;">{{ user.profile.registration_number|default:"-" }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div style="border-top: 1px solid #f1f5f9; padding-top: 2rem;">
+                    <button type="button" onclick="toggleEditMode()" class="button button-primary" style="padding: 1rem 2.5rem;">
+                        <i class="fas fa-user-edit"></i> Edit Profile Information
+                    </button>
+                    <a href="{% url 'request_list' %}" class="button button-secondary" style="margin-left: 1rem;">Back</a>
+                </div>
+            </div>
+
+            <!-- Edit Mode -->
+            <div id="profile-edit-mode" style="display: none;">
+                <form method="post" style="display: flex; flex-direction: column; gap: 2rem;">
+                    {% csrf_token %}
+                    
+                    <div style="background: #f8fafc; padding: 1.5rem; border-radius: 1rem; border: 1px solid #e2e8f0; margin-bottom: 1rem;">
+                        <i class="fas fa-info-circle" style="color: var(--primary); margin-right: 0.5rem;"></i>
+                        <span style="font-size: 0.875rem; color: #64748b;">The <strong>username</strong> field is read-only and cannot be changed.</span>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                        {% for field in user_form %}
+                        <div class="form-group" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <label style="font-size: 0.875rem; font-weight: 700; color: #334155;">{{ field.label }}</label>
+                            {{ field }}
+                        </div>
+                        {% endfor %}
+                        
+                        {% for field in profile_form %}
+                        <div class="form-group" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <label style="font-size: 0.875rem; font-weight: 700; color: #334155;">{{ field.label }}</label>
+                            {{ field }}
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div style="border-top: 1px solid #f1f5f9; padding-top: 2rem; display: flex; gap: 1rem;">
+                        <button type="submit" class="button button-primary" style="padding: 1rem 2.5rem;">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                        <button type="button" onclick="toggleEditMode()" class="button button-secondary">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    input, select {
+        width: 100%;
+        padding: 0.875rem 1.25rem;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 1rem;
+        font-size: 1rem;
+        transition: all 0.2s;
+        color: #1e293b;
+    }
+    input:focus, select:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    }
+    input[readonly] {
+        background: #f1f5f9;
+        cursor: not-allowed;
+    }
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<script>
+    function toggleEditMode() {
+        const viewMode = document.getElementById('profile-view-mode');
+        const editMode = document.getElementById('profile-edit-mode');
+        if (viewMode.style.display === 'none') {
+            viewMode.style.display = 'block';
+            editMode.style.display = 'none';
+        } else {
+            viewMode.style.display = 'none';
+            editMode.style.display = 'block';
+        }
+    }
+</script>
+{% endblock %}

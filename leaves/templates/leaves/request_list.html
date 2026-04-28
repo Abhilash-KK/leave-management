@@ -1,213 +1,100 @@
 {% extends 'leaves/base.html' %}
 
-{% block title %}Leave Dashboard - LeaveFlow{% endblock %}
-
-{% block header_title %}Leave Management{% endblock %}
-
-{% block header_action %}
-<a href="{% url 'request_create' %}" class="button">
-    <i class="fas fa-plus" style="margin-right: 8px;"></i> New Request
-</a>
-{% endblock %}
-
-{% block extra_css %}
-<style>
-    .card-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-        gap: 1.5rem;
-        animation: fadeIn 0.6s ease-out;
-    }
-
-    .leave-card {
-        background: white;
-        border-radius: 1.25rem;
-        padding: 1.5rem;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-        border: 1px solid var(--border-color);
-        display: flex;
-        flex-direction: column;
-        gap: 1.25rem;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .leave-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        border-color: var(--primary-color);
-    }
-
-    .card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-    }
-
-    .student-info {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .avatar {
-        width: 48px;
-        height: 48px;
-        background: #f1f5f9;
-        color: var(--primary-color);
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.25rem;
-        font-weight: 700;
-    }
-
-    .student-name {
-        font-weight: 700;
-        color: var(--text-main);
-        font-size: 1.125rem;
-        margin-bottom: 2px;
-    }
-
-    .leave-date {
-        font-size: 0.8125rem;
-        color: var(--text-muted);
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
-    }
-
-    .card-body {
-        flex-grow: 1;
-    }
-
-    .reason-text {
-        font-size: 0.875rem;
-        color: #475569;
-        line-height: 1.6;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        padding: 0.75rem;
-        background: #f8fafc;
-        border-radius: 0.75rem;
-        position: relative;
-    }
-
-    .card-footer {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        padding-top: 1rem;
-        border-top: 1px solid #f1f5f9;
-    }
-
-    .card-actions {
-        display: flex;
-        gap: 0.5rem;
-    }
-
-    .card-btn {
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none;
-        font-size: 0.875rem;
-        transition: all 0.2s;
-        border: 1px solid #e2e8f0;
-        color: var(--text-muted);
-    }
-
-    .card-btn:hover {
-        background: #f1f5f9;
-        color: var(--primary-color);
-        border-color: var(--primary-color);
-    }
-
-    .card-btn.delete:hover {
-        background: #f1f5f9;
-        color: #475569;
-        border-color: #475569;
-    }
-
-    .empty-state {
-        grid-column: 1 / -1;
-        padding: 5rem 2rem;
-        text-align: center;
-        background: white;
-        border-radius: 1.5rem;
-        border: 2px dashed #e2e8f0;
-    }
-
-    .empty-icon {
-        font-size: 3rem;
-        color: #cbd5e1;
-        margin-bottom: 1.5rem;
-    }
-</style>
-{% endblock %}
+{% block title %}Requests - LeaveFlow{% endblock %}
+{% block header_title %}{{ header_title|default:"Leave Requests" }}{% endblock %}
 
 {% block content %}
-<div class="card-grid">
+<div class="card-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 1.5rem; animation: fadeIn 0.6s ease-out;">
     {% if requests %}
         {% for request in requests %}
-        <div class="leave-card" style="animation: slideUp 0.4s ease-out forwards; opacity: 0;">
-            <div class="card-header">
-                <div class="student-info">
-                    <div class="avatar">
-                        {{ request.student_name|first|upper }}
-                    </div>
-                    <div>
-                        <div class="student-name">{{ request.student_name }}</div>
-                        <div class="leave-date">
-                            <i class="far fa-calendar-alt"></i> {{ request.leave_date|date:"l, M d, Y" }}
-                        </div>
+        <div class="glass-card leave-card" style="display: flex; flex-direction: column; gap: 1.25rem; position: relative; transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.4);">
+            
+            <!-- Status Badge -->
+            <div style="position: absolute; top: 1.5rem; right: 1.5rem;">
+                <span class="status-badge" style="
+                    padding: 0.4rem 0.8rem;
+                    border-radius: 2rem;
+                    font-size: 0.75rem;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    {% if request.status == 'Pending' %} background: #fef9c3; color: #854d0e; 
+                    {% elif request.status == 'Approved' %} background: #dcfce7; color: #166534; 
+                    {% else %} background: #fee2e2; color: #991b1b; {% endif %}
+                ">
+                    {{ request.status }}
+                </span>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 1rem; padding-right: 80px;">
+                <div style="width: 48px; height: 48px; background: var(--primary); color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.25rem;">
+                    {{ request.user.username|first|upper }}
+                </div>
+                <div>
+                    <div style="font-weight: 700; color: #0f172a; font-size: 1.1rem;">{{ request.user.username }}</div>
+                    <div style="font-size: 0.875rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="far fa-calendar-alt"></i> 
+                        {{ request.start_date|date:"M d" }} 
+                        {% if request.end_date %}to {{ request.end_date|date:"M d, Y" }}{% else %}(One Day){% endif %}
                     </div>
                 </div>
             </div>
 
-            <div class="card-body">
-                <div class="reason-text">
-                    <i class="fas fa-quote-left" style="font-size: 0.75rem; opacity: 0.2; position: absolute; top: 8px; left: 8px;"></i>
-                    {{ request.reason }}
+            <div style="background: rgba(248, 250, 252, 0.8); padding: 1.25rem; border-radius: 1rem; font-size: 0.9375rem; color: #475569; line-height: 1.6; border: 1px solid #f1f5f9;">
+                <div style="font-weight: 600; color: #64748b; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.25rem;">Reason</div>
+                {{ request.reason }}
+                
+                {% if request.admin_response %}
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 2px dashed #e2e8f0; font-size: 0.875rem; color: var(--text-muted); font-style: italic;">
+                    <strong style="color: #0f172a; font-style: normal;">Admin Response:</strong> {{ request.admin_response }}
                 </div>
+                {% endif %}
             </div>
 
-            <div class="card-footer">
-                <div class="card-actions">
-                    <a href="{% url 'request_update' request.pk %}" class="card-btn" title="Edit">
-                        <i class="fas fa-edit"></i>
-                    </a>
-                    <a href="{% url 'request_delete' request.pk %}" class="card-btn delete" title="Delete">
-                        <i class="fas fa-trash-alt"></i>
+            {% if is_admin %}
+                {% if request.status == 'Pending' %}
+                <form action="{% url 'approve_leave' request.pk %}" method="post" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    {% csrf_token %}
+                    <input type="text" name="admin_response" style="width: 100%; padding: 0.75rem 1rem; border-radius: 0.75rem; border: 1px solid var(--border); font-size: 0.875rem; background: white;" placeholder="Add a comment (optional)...">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                        <button type="submit" class="button" style="background: var(--success); color: white; justify-content: center;">Approve</button>
+                        <button type="submit" formaction="{% url 'reject_leave' request.pk %}" class="button" style="background: var(--danger); color: white; justify-content: center;">Reject</button>
+                    </div>
+                </form>
+                {% elif request.status == 'Rejected' %}
+                <div style="display: flex; justify-content: flex-end;">
+                    <a href="{% url 'request_delete' request.pk %}" class="button button-danger" style="font-size: 0.8125rem;">
+                        <i class="fas fa-trash-alt"></i> Delete Record
                     </a>
                 </div>
+                {% endif %}
+            {% elif request.status == 'Pending' %}
+            <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+                <a href="{% url 'request_update' request.pk %}" class="button button-secondary" style="font-size: 0.8125rem;">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                <a href="{% url 'request_delete' request.pk %}" class="button button-danger" style="font-size: 0.8125rem;">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
             </div>
+            {% endif %}
         </div>
         {% endfor %}
     {% else %}
-        <div class="empty-state">
-            <div class="empty-icon">
-                <i class="fas fa-folder-open"></i>
+        <div style="grid-column: 1 / -1; padding: 6rem 2rem; text-align: center; background: white; border-radius: 2rem; border: 2px dashed var(--border); animation: fadeIn 1s ease;">
+            <div style="width: 80px; height: 80px; background: #f8fafc; color: #cbd5e1; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                <i class="fas fa-folder-open" style="font-size: 2.5rem;"></i>
             </div>
-            <h3 style="margin-bottom: 0.5rem; color: var(--text-main);">No requests found</h3>
-            <p style="color: var(--text-muted); margin-bottom: 2rem;">There are no leave requests yet.</p>
-            <a href="{% url 'request_create' %}" class="button">Create First Request</a>
+            <h3 style="font-size: 1.5rem; color: #1e293b; margin-bottom: 0.5rem;">No Requests Found</h3>
+            <p style="color: var(--text-muted); font-size: 1rem; max-width: 400px; margin: 0 auto;">{% if is_admin %}There are no leave requests in the system currently.{% else %}You haven't submitted any leave requests yet.{% endif %}</p>
         </div>
     {% endif %}
 </div>
 
 <style>
-    @keyframes slideUp {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
+    .leave-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--card-shadow-hover);
+        border-color: var(--primary-light);
     }
 </style>
 {% endblock %}

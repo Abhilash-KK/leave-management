@@ -1,95 +1,84 @@
 {% extends 'leaves/base.html' %}
 
 {% block title %}{% if object %}Edit{% else %}New{% endif %} Request - LeaveFlow{% endblock %}
+{% block header_title %}{% if object %}Update Request{% else %}New Leave Application{% endif %}{% endblock %}
 
-{% block header_title %}{% if object %}Edit Leave Request{% else %}New Leave Request{% endif %}{% endblock %}
+{% block content %}
+<div style="max-width: 700px; margin: 0 auto; animation: slideUp 0.6s ease-out;">
+    <div class="glass-card" style="padding: 3.5rem; border: 1px solid rgba(255, 255, 255, 0.4);">
+        <div style="text-align: center; margin-bottom: 3rem;">
+            <div style="width: 64px; height: 64px; background: rgba(99, 102, 241, 0.1); color: var(--primary); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                <i class="fas {% if object %}fa-edit{% else %}fa-paper-plane{% endif %}" style="font-size: 1.75rem;"></i>
+            </div>
+            <h2 style="font-size: 1.75rem; color: #0f172a; font-weight: 800; margin-bottom: 0.5rem;">
+                {% if object %}Modify Request{% else %}Submit Application{% endif %}
+            </h2>
+            <p style="color: var(--text-muted); font-size: 1rem;">Please provide the details for your leave request below.</p>
+        </div>
 
-{% block extra_css %}
+        <form method="post" style="display: flex; flex-direction: column; gap: 2rem;">
+            {% csrf_token %}
+            
+            {% for field in form %}
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <label for="{{ field.id_for_label }}" style="font-size: 0.875rem; font-weight: 700; color: #334155; display: flex; justify-content: space-between; align-items: center;">
+                    {{ field.label }}
+                    {% if field.field.required %}<span style="color: var(--danger); font-size: 0.75rem; font-weight: 500;">(Required)</span>{% endif %}
+                </label>
+                
+                <div style="position: relative;">
+                    {{ field }}
+                </div>
+
+                {% if field.help_text %}
+                <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">{{ field.help_text }}</p>
+                {% endif %}
+
+                {% if field.errors %}
+                <div style="margin-top: 0.5rem; padding: 0.75rem; background: #fff1f2; border-radius: 0.75rem; border-left: 4px solid var(--danger);">
+                    {% for error in field.errors %}
+                    <p style="color: #991b1b; font-size: 0.8125rem; font-weight: 500; margin: 0;">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1.5rem; padding-top: 2.5rem; border-top: 1px solid #f1f5f9;">
+                <a href="{% url 'request_list' %}" class="button button-secondary" style="justify-content: center; padding: 1rem;">
+                    Back to Dashboard
+                </a>
+                <button type="submit" class="button button-primary" style="justify-content: center; padding: 1rem;">
+                    {% if object %}Save Changes{% else %}Send Request{% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <style>
-    .form-container {
-        max-width: 600px;
-        margin: 2rem auto;
-        padding: 2.5rem;
+    input, textarea, select {
+        width: 100%;
+        padding: 0.875rem 1.25rem;
         background: white;
-        border-radius: 1.5rem;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e2e8f0;
+        border-radius: 1rem;
+        font-size: 1rem;
+        transition: all 0.2s;
+        color: #1e293b;
     }
-
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-    }
-
-    .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
-    label {
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: var(--text-muted);
-    }
-
-    input, textarea {
-        padding: 0.75rem 1rem;
-        border: 1px solid var(--border-color);
-        border-radius: 0.5rem;
-        font-family: inherit;
-        font-size: 0.875rem;
-        transition: border-color 0.15s, box-shadow 0.15s;
-    }
-
-    input:focus, textarea:focus {
+    input:focus, textarea:focus, select:focus {
         outline: none;
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
     }
-
     textarea {
         min-height: 120px;
         resize: vertical;
     }
-
-    .form-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 1rem;
-        margin-top: 1rem;
-    }
-
-    .error-list {
-        list-style: none;
-        color: var(--danger);
-        font-size: 0.75rem;
-        margin-top: 0.25rem;
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 </style>
-{% endblock %}
-
-{% block content %}
-<div class="form-container">
-    <form method="post">
-        {% csrf_token %}
-        {% for field in form %}
-        <div class="form-group">
-            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-            {{ field }}
-            {% if field.errors %}
-            <ul class="error-list">
-                {% for error in field.errors %}
-                <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-        </div>
-        {% endfor %}
-        <div class="form-actions">
-            <a href="{% url 'request_list' %}" class="button secondary">Cancel</a>
-            <button type="submit" class="button">{% if object %}Update{% else %}Submit{% endif %}</button>
-        </div>
-    </form>
-</div>
 {% endblock %}
