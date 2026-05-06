@@ -1,82 +1,180 @@
 {% extends 'leaves/base.html' %}
+{% load static %}
 
 {% block title %}Create Account - Student Leave Hub{% endblock %}
 
 {% block extra_css %}
 <style>
-    .register-container {
-        width: 100%;
-        max-width: 500px;
-        animation: fadeInScale 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-        padding: 2rem 0;
+    /* LIGHT THEME DESIGN SYSTEM (Matching Login) */
+    :root {
+        --bg-light: #f8fafc;
+        --text-dark: #0f172a;
+        --text-muted: #64748b;
+        --primary-purple: #4f46e5;
+        --accent-gradient: linear-gradient(135deg, #f97316 0%, #ec4899 100%);
+        --card-bg: rgba(255, 255, 255, 0.8);
+        --card-border: rgba(255, 255, 255, 1);
     }
-    
+
+    #particles-js {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    main.auth-page {
+        background-color: var(--bg-light) !important;
+        background-image: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0, transparent 50%), 
+                          radial-gradient(at 50% 0%, rgba(168, 85, 247, 0.1) 0, transparent 50%) !important;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 2rem 1.5rem;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .login-wrapper {
+        display: flex;
+        width: 100%;
+        max-width: 1100px;
+        min-height: 750px; /* Slightly taller for registration fields */
+        background: var(--card-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--card-border);
+        border-radius: 3rem;
+        overflow: hidden;
+        z-index: 10;
+        box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.1);
+        animation: fadeInScale 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
     @keyframes fadeInScale {
-        from { opacity: 0; transform: scale(0.95) translateY(10px); }
+        from { opacity: 0; transform: scale(0.95) translateY(30px); }
         to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
-    .auth-card {
-        background: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.5);
-        border-radius: 2rem;
-        padding: 3rem;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
-    }
-
-    .brand-logo {
-        width: 64px;
-        height: 64px;
-        background: var(--primary);
-        color: white;
-        border-radius: 1.25rem;
+    .branding-side {
+        flex: 1.2;
+        padding: 5rem;
         display: flex;
-        align-items: center;
+        flex-direction: column;
         justify-content: center;
-        font-size: 1.75rem;
-        margin: 0 auto 1.5rem;
-        box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.03) 0%, transparent 100%);
+        color: var(--text-dark);
+        position: relative;
     }
 
-    input, select {
-        width: 100%;
-        padding: 0.875rem 1.25rem;
+    .branding-side h1 {
+        font-size: 4rem;
+        font-weight: 900;
+        margin-bottom: 1.5rem;
+        letter-spacing: -0.04em;
+        line-height: 1;
+        color: var(--text-dark);
+    }
+
+    .branding-side .divider {
+        width: 60px;
+        height: 5px;
+        background: var(--accent-gradient);
+        margin-bottom: 2.5rem;
+        border-radius: 2px;
+    }
+
+    .form-side {
+        flex: 1;
+        padding: 5rem;
         background: white;
-        border: 1px solid #e2e8f0;
-        border-radius: 1rem;
-        font-size: 1rem;
-        transition: all 0.2s;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        box-shadow: -10px 0 30px rgba(0,0,0,0.02);
+        overflow-y: auto; /* Handle many registration fields */
     }
 
-    input:focus, select:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    .form-side h2 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--text-dark);
+        margin-bottom: 2rem;
+        position: relative;
     }
 
-    .btn-auth {
+    .form-side h2::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 30px;
+        height: 4px;
+        background: var(--primary-purple);
+        border-radius: 2px;
+    }
+
+    .input-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .input-group label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .input-group input, .input-group select {
         width: 100%;
-        padding: 1rem;
-        background: var(--primary);
+        background: #f1f5f9 !important;
+        border: 2px solid transparent !important;
+        border-radius: 1.25rem !important;
+        padding: 0.9rem 1.25rem !important;
+        color: var(--text-dark) !important;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+
+    .input-group input:focus, .input-group select:focus {
+        background: white !important;
+        border-color: var(--primary-purple) !important;
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: 1.1rem;
+        background: var(--accent-gradient);
         color: white;
         border: none;
-        border-radius: 1rem;
-        font-size: 1rem;
-        font-weight: 700;
+        border-radius: 1.25rem;
+        font-size: 1.1rem;
+        font-weight: 800;
         cursor: pointer;
-        transition: all 0.2s;
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+        box-shadow: 0 15px 30px -5px rgba(236, 72, 153, 0.4);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0.75rem;
-        margin-top: 1rem;
+        gap: 0.5rem;
     }
 
-    .btn-auth:hover {
-        background: var(--primary-dark);
-        transform: translateY(-2px);
-        box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+    .btn-submit:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 25px 40px -5px rgba(236, 72, 153, 0.5);
     }
 
     .help-text {
@@ -84,48 +182,153 @@
         color: var(--text-muted);
         display: block;
         margin-top: 0.25rem;
+        line-height: 1.4;
+    }
+
+    @media (max-width: 1000px) {
+        .login-wrapper { flex-direction: column; max-width: 500px; height: auto; }
+        .branding-side { padding: 4rem 2rem; text-align: center; align-items: center; }
+        .branding-side h1 { font-size: 3rem; }
+        .form-side { width: 100%; padding: 4rem 2rem; box-shadow: none; border-top: 1px solid #f1f5f9; }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="register-container">
-    <div class="auth-card">
-        <div class="brand-logo">
-            <i class="fas fa-paper-plane"></i>
+<canvas id="particles-js"></canvas>
+
+<div class="login-wrapper">
+    <!-- LEFT SIDE -->
+    <div class="branding-side">
+        <div style="position: absolute; top: 4rem; left: 4rem;">
+            <i class="fas fa-paper-plane" style="font-size: 2.5rem; color: var(--primary-purple);"></i>
         </div>
+        <h1>Join Us!</h1>
+        <div class="divider"></div>
         
-        <div style="text-align: center; margin-bottom: 2.5rem;">
-            <h2 style="font-size: 1.75rem; font-weight: 800; color: #0f172a; margin-bottom: 0.5rem;">Create Account</h2>
-            <p style="color: var(--text-muted);">Join Student Leave Hub Management System</p>
+        <div id="quote-container" style="margin-top: 1rem;">
+            <p id="quote-text" style="font-size: 1.2rem; font-style: italic; line-height: 1.8; margin-bottom: 1.5rem; color: var(--text-dark); font-weight: 500;">"Somewhere, something incredible is waiting to be known."</p>
+            <p id="quote-author" style="font-size: 0.85rem; font-weight: 800; color: var(--primary-purple); text-transform: uppercase; letter-spacing: 0.2em;">— CARL SAGAN</p>
         </div>
 
-        <form method="post" style="display: flex; flex-direction: column; gap: 1.25rem;">
+        <p style="margin-top: 3rem; font-size: 0.95rem; color: var(--text-muted);">Create your account to start managing your academic leaves with ease and transparency.</p>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="form-side">
+        <h2>Create Account</h2>
+        
+        <form method="post">
             {% csrf_token %}
             {% for field in form %}
-            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                <label style="font-size: 0.875rem; font-weight: 700; color: #475569;">{{ field.label }}</label>
+            <div class="input-group">
+                <label>{{ field.label }}</label>
                 {{ field }}
                 {% if field.help_text %}
                 <span class="help-text">{{ field.help_text }}</span>
                 {% endif %}
                 {% if field.errors %}
-                <p style="color: var(--danger); font-size: 0.75rem; font-weight: 600;">{{ field.errors.0 }}</p>
+                <p style="color: #ef4444; font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600;">{{ field.errors.0 }}</p>
                 {% endif %}
             </div>
             {% endfor %}
 
-            <button type="submit" class="btn-auth">
-                Getting Started <i class="fas fa-sparkles"></i>
+            <button type="submit" class="btn-submit">
+                Register <i class="fas fa-sparkles" style="font-size: 0.9rem;"></i>
             </button>
         </form>
 
-        <div style="margin-top: 2.5rem; text-align: center; border-top: 1px solid #f1f5f9; padding-top: 2rem;">
-            <p style="color: var(--text-muted); font-size: 0.9375rem;">
+        <div style="margin-top: 3rem; text-align: center;">
+            <p style="color: var(--text-muted); font-size: 0.9rem;">
                 Already have an account? 
-                <a href="{% url 'login' %}" style="color: var(--primary); font-weight: 700; text-decoration: none;">Sign in</a>
+                <a href="{% url 'login' %}" style="color: var(--primary-purple); font-weight: 800; text-decoration: none; border-bottom: 2px solid rgba(79, 70, 229, 0.2);">Sign in</a>
             </p>
         </div>
     </div>
 </div>
+
+<script>
+    // --- QUOTES SYSTEM ---
+    const quotes = [
+        { text: "The important thing is not to stop questioning. Curiosity has its own reason for existence.", author: "Albert Einstein" },
+        { text: "Science is a way of thinking much more than it is a body of knowledge.", author: "Carl Sagan" },
+        { text: "Nothing in life is to be feared, it is only to be understood.", author: "Marie Curie" },
+        { text: "Somewhere, something incredible is waiting to be known.", author: "Carl Sagan" },
+        { text: "Imagination is more important than knowledge.", author: "Albert Einstein" }
+    ];
+
+    function updateQuote() {
+        const quote = quotes[Math.floor(Math.random() * quotes.length)];
+        document.getElementById('quote-text').innerText = `"${quote.text}"`;
+        document.getElementById('quote-author').innerText = `— ${quote.author.toUpperCase()}`;
+    }
+
+    // --- PARTICLE SYSTEM ---
+    const canvas = document.getElementById('particles-js');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const particleCount = 60;
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 1;
+            this.speedX = Math.random() * 0.4 - 0.2;
+            this.speedY = Math.random() * 0.4 - 0.2;
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if (this.x > canvas.width) this.x = 0;
+            if (this.x < 0) this.x = canvas.width;
+            if (this.y > canvas.height) this.y = 0;
+            if (this.y < 0) this.y = canvas.height;
+        }
+        draw() {
+            ctx.fillStyle = 'rgba(79, 70, 229, 0.15)'; 
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    function initParticles() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        particles = [];
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < particles.length; i++) {
+            particles[i].update();
+            particles[i].draw();
+            for (let j = i; j < particles.length; j++) {
+                const dx = particles[i].x - particles[j].x;
+                const dy = particles[i].y - particles[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < 120) {
+                    ctx.strokeStyle = `rgba(79, 70, 229, ${0.1 - distance/1200})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.stroke();
+                }
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', initParticles);
+    document.addEventListener('DOMContentLoaded', () => {
+        updateQuote();
+        initParticles();
+        animate();
+    });
+</script>
 {% endblock %}
