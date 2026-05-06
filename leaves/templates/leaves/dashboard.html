@@ -50,7 +50,8 @@
 </div>
 
 <!-- CALENDAR SECTION -->
-<div style="margin-top: 3rem; animation: slideUp 0.8s ease-out 0.2s both;">
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-top: 3rem; animation: slideUp 0.8s ease-out 0.2s both;">
+    <!-- Calendar Card -->
     <div class="glass-card" style="padding: 2.5rem;">
         <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 2rem; display: flex; align-items: center; gap: 0.75rem;">
             <i class="fas fa-calendar-alt" style="color: var(--primary);"></i>
@@ -58,12 +59,46 @@
         </h2>
         <div id="calendar" style="min-height: 600px;"></div>
     </div>
+
+    <!-- On This Day Card -->
+    <div style="display: flex; flex-direction: column; gap: 2rem;">
+        <div class="glass-card" style="padding: 2.5rem; background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);">
+            <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                <i class="fas fa-history" style="color: var(--primary);"></i>
+                On This Day
+            </h2>
+            <div id="science-history">
+                <div style="font-size: 0.75rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem;">Scientific Breakthrough</div>
+                <p id="history-text" style="font-size: 1.1rem; color: var(--text-main); line-height: 1.6; margin-bottom: 1.5rem; font-weight: 500;">
+                    Loading today's history...
+                </p>
+                <div id="history-year" style="font-size: 1.5rem; font-weight: 900; color: var(--text-main); opacity: 0.2;"></div>
+            </div>
+        </div>
+
+        <div class="glass-card" style="padding: 2rem; border-left: 4px solid var(--success);">
+            <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Academic Tip</h3>
+            <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.5;">
+                Remember to submit your leave requests at least 48 hours in advance for faster processing!
+            </p>
+        </div>
+    </div>
 </div>
 
 <script>
+    const historyEvents = [
+        { year: "1921", text: "Albert Einstein was awarded the Nobel Prize in Physics for his explanation of the photoelectric effect." },
+        { year: "1953", text: "James Watson and Francis Crick published their paper describing the double helix structure of DNA." },
+        { year: "1687", text: "Isaac Newton published 'Philosophiæ Naturalis Principia Mathematica', laying the foundations for classical mechanics." },
+        { year: "1898", text: "Marie and Pierre Curie announced the discovery of a new chemical element, which they named polonium." },
+        { year: "1969", text: "The first message was sent over ARPANET, the precursor to the modern internet." },
+        { year: "1990", text: "The Hubble Space Telescope was launched into orbit from the Space Shuttle Discovery." },
+        { year: "1928", text: "Alexander Fleming discovered penicillin, revolutionizing medicine with the first true antibiotic." }
+    ];
+
     document.addEventListener('DOMContentLoaded', function() {
+        // --- CALENDAR ---
         const calendarEl = document.getElementById('calendar');
-        
         const calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             headerToolbar: {
@@ -77,6 +112,11 @@
             dayMaxEvents: true
         });
         calendar.render();
+
+        // --- SCIENCE HISTORY ---
+        const event = historyEvents[Math.floor(Math.random() * historyEvents.length)];
+        document.getElementById('history-text').innerText = event.text;
+        document.getElementById('history-year').innerText = event.year;
     });
 </script>
 
