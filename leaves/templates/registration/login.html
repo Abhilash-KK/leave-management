@@ -5,11 +5,12 @@
 
 {% block extra_css %}
 <style>
-    /* Full page background styling with overlay and blur */
+    /* Full page background styling with high-quality academic theme */
     main.auth-page {
         background: 
-            linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(99, 102, 241, 0.3) 100%),
-            url('{% static "images/academic_campus_bg.png" %}') center/cover no-repeat;
+            linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(99, 102, 241, 0.3) 100%),
+            url('https://images.unsplash.com/photo-1541339907198-e08756eaa63f?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
+        background-attachment: fixed;
         position: relative;
         overflow: hidden;
     }
