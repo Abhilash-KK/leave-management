@@ -262,8 +262,8 @@
             to { opacity: 1; }
         }
 
-        {% block extra_css %}{% endblock %}
     </style>
+    {% block extra_css %}{% endblock %}
 </head>
 <body class="{% if user.is_authenticated %}authenticated{% endif %}">
     {% if user.is_authenticated %}
