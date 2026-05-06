@@ -8,6 +8,56 @@ from django.conf import settings
 from .models import LeaveRequest, StudentProfile
 from .forms import LeaveRequestForm, StudentRegistrationForm, UserUpdateForm, StudentProfileForm
 from django.contrib import messages
+from django.db.models import Count
+from django.http import JsonResponse
+import json
+
+def leave_events(request):
+    if not request.user.is_authenticated:
+        return JsonResponse([], safe=False)
+        
+    if request.user.is_staff:
+        leaves = LeaveRequest.objects.filter(status='Approved')
+    else:
+        leaves = LeaveRequest.objects.filter(user=request.user)
+    
+    events = []
+    for leave in leaves:
+        color = '#10b981' if leave.status == 'Approved' else '#f59e0b' if leave.status == 'Pending' else '#ef4444'
+        events.append({
+            'title': f"{leave.user.username} ({leave.status})",
+            'start': leave.start_date.isoformat(),
+            'end': (leave.end_date or leave.start_date).isoformat(),
+            'allDay': True,
+            'backgroundColor': color,
+            'borderColor': color,
+        })
+    return JsonResponse(events, safe=False)
+from django.db.models import Count
+import json
+
+class AdminAnalyticsView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
+    template_name = 'leaves/analytics.html'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Status distribution
+        status_data = LeaveRequest.objects.values('status').annotate(count=Count('status'))
+        context['status_labels'] = json.dumps([item['status'] for item in status_data])
+        context['status_counts'] = json.dumps([item['count'] for item in status_data])
+        
+        # Leaves per department
+        dept_data = StudentProfile.objects.values('department').annotate(count=Count('user__leave_requests'))
+        dept_data = [d for d in dept_data if d['department']]
+        context['dept_labels'] = json.dumps([item['department'] for item in dept_data])
+        context['dept_counts'] = json.dumps([item['count'] for item in dept_data])
+
+        context['header_title'] = "Admin Analytics"
+        return context
 
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'leaves/dashboard.html'

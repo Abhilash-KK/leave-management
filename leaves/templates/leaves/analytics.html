@@ -1,0 +1,88 @@
+{% extends 'leaves/base.html' %}
+
+{% block title %}Analytics - Student Leave Hub{% endblock %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; animation: fadeIn 0.6s ease-out;">
+    <!-- Status Distribution Chart -->
+    <div class="glass-card">
+        <h3 style="margin-bottom: 1.5rem; font-weight: 700; color: var(--text-main);">Leave Status Distribution</h3>
+        <div style="height: 300px; position: relative;">
+            <canvas id="statusChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Department Distribution Chart -->
+    <div class="glass-card">
+        <h3 style="margin-bottom: 1.5rem; font-weight: 700; color: var(--text-main);">Leaves by Department</h3>
+        <div style="height: 300px; position: relative;">
+            <canvas id="deptChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        const textColor = isDark ? '#f1f5f9' : '#1e293b';
+        const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
+
+        // Status Chart
+        const statusCtx = document.getElementById('statusChart').getContext('2d');
+        new Chart(statusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: {{ status_labels|safe }},
+                datasets: [{
+                    data: {{ status_counts|safe }},
+                    backgroundColor: ['#f59e0b', '#10b981', '#ef4444', '#6366f1'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: textColor, font: { family: 'Inter', weight: '600' } }
+                    }
+                }
+            }
+        });
+
+        // Department Chart
+        const deptCtx = document.getElementById('deptChart').getContext('2d');
+        new Chart(deptCtx, {
+            type: 'bar',
+            data: {
+                labels: {{ dept_labels|safe }},
+                datasets: [{
+                    label: 'Leave Requests',
+                    data: {{ dept_counts|safe }},
+                    backgroundColor: '#6366f1',
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: gridColor },
+                        ticks: { color: textColor }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: textColor }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

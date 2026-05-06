@@ -30,7 +30,7 @@
                     {{ request.user.username|first|upper }}
                 </div>
                 <div>
-                    <div style="font-weight: 700; color: #0f172a; font-size: 1.1rem;">{{ request.user.username }}</div>
+                    <div style="font-weight: 700; color: var(--text-main); font-size: 1.1rem;">{{ request.user.username }}</div>
                     <div style="font-size: 0.875rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem;">
                         <i class="far fa-calendar-alt"></i> 
                         {{ request.start_date|date:"M d" }} 
@@ -39,13 +39,21 @@
                 </div>
             </div>
 
-            <div style="background: rgba(248, 250, 252, 0.8); padding: 1.25rem; border-radius: 1rem; font-size: 0.9375rem; color: #475569; line-height: 1.6; border: 1px solid #f1f5f9;">
-                <div style="font-weight: 600; color: #64748b; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.25rem;">Reason</div>
+            <div style="background: var(--bg-main); padding: 1.25rem; border-radius: 1rem; font-size: 0.9375rem; color: var(--text-main); line-height: 1.6; border: 1px solid var(--border);">
+                <div style="font-weight: 600; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.25rem;">Reason</div>
                 {{ request.reason }}
                 
+                {% if request.attachment %}
+                <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border);">
+                    <a href="{{ request.attachment.url }}" target="_blank" style="display: flex; align-items: center; gap: 0.5rem; color: var(--primary); text-decoration: none; font-size: 0.8125rem; font-weight: 600;">
+                        <i class="fas fa-paperclip"></i> View Proof / Attachment
+                    </a>
+                </div>
+                {% endif %}
+
                 {% if request.admin_response %}
-                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 2px dashed #e2e8f0; font-size: 0.875rem; color: var(--text-muted); font-style: italic;">
-                    <strong style="color: #0f172a; font-style: normal;">Admin Response:</strong> {{ request.admin_response }}
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 2px dashed var(--border); font-size: 0.875rem; color: var(--text-muted); font-style: italic;">
+                    <strong style="color: var(--text-main); font-style: normal;">Admin Response:</strong> {{ request.admin_response }}
                 </div>
                 {% endif %}
             </div>

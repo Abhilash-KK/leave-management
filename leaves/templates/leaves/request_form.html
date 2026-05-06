@@ -16,7 +16,7 @@
             <p style="color: var(--text-muted); font-size: 1rem;">Please provide the details for your leave request below.</p>
         </div>
 
-        <form method="post" style="display: flex; flex-direction: column; gap: 2rem;">
+        <form method="post" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 2rem;">
             {% csrf_token %}
             
             {% for field in form %}
@@ -60,12 +60,12 @@
     input, textarea, select {
         width: 100%;
         padding: 0.875rem 1.25rem;
-        background: white;
-        border: 1px solid #e2e8f0;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
         border-radius: 1rem;
         font-size: 1rem;
         transition: all 0.2s;
-        color: #1e293b;
+        color: var(--text-main);
     }
     input:focus, textarea:focus, select:focus {
         outline: none;

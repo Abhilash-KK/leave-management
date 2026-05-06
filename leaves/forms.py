@@ -11,7 +11,7 @@ class StudentRegistrationForm(UserCreationForm):
 class LeaveRequestForm(forms.ModelForm):
     class Meta:
         model = LeaveRequest
-        fields = ['start_date', 'end_date', 'reason']
+        fields = ['start_date', 'end_date', 'reason', 'attachment']
         widgets = {
             'start_date': forms.DateInput(attrs={'type': 'date'}),
             'end_date': forms.DateInput(attrs={'type': 'date'}),

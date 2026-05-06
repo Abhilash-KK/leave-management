@@ -12,4 +12,6 @@ urlpatterns = [
     path('profile/', views.ProfileUpdateView.as_view(), name='profile'),
     path('my-requests/', views.MyRequestsListView.as_view(), name='my_requests'),
     path('all-requests/', views.LeaveRequestListView.as_view(), name='all_requests'),
+    path('analytics/', views.AdminAnalyticsView.as_view(), name='analytics'),
+    path('api/events/', views.leave_events, name='leave_events'),
 ]

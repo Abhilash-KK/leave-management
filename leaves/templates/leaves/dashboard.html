@@ -44,6 +44,37 @@
 
 </div>
 
+<!-- CALENDAR SECTION -->
+<div style="margin-top: 3rem; animation: slideUp 0.8s ease-out 0.2s both;">
+    <div class="glass-card" style="padding: 2.5rem;">
+        <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 2rem; display: flex; align-items: center; gap: 0.75rem;">
+            <i class="fas fa-calendar-alt" style="color: var(--primary);"></i>
+            Leave Schedule
+        </h2>
+        <div id="calendar" style="min-height: 600px;"></div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const calendarEl = document.getElementById('calendar');
+        
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek'
+            },
+            events: '{% url "leave_events" %}',
+            themeSystem: 'standard',
+            height: 'auto',
+            dayMaxEvents: true
+        });
+        calendar.render();
+    });
+</script>
+
 
 <style>
     .stat-card {
