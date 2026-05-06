@@ -84,7 +84,7 @@ class RegisterView(FormView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        messages.success(self.request, "Account created! Welcome to LeaveFlow.")
+        messages.success(self.request, "Account created! Welcome to Student Leave Hub.")
         return redirect(self.success_url)
 
 class LeaveRequestListView(LoginRequiredMixin, ListView):
@@ -115,7 +115,7 @@ class LeaveRequestCreateView(LoginRequiredMixin, CreateView):
         # Send Email Notification
         subject = f"New Leave Request: {self.request.user.username}"
         message = f"A new leave request has been submitted by {self.request.user.username} from {self.object.start_date} to {self.object.end_date or 'N/A'}.\n\nReason: {self.object.reason}"
-        from_email = settings.DEFAULT_FROM_EMAIL or 'noreply@leaveflow.com'
+        from_email = settings.DEFAULT_FROM_EMAIL or 'noreply@studentleavehub.com'
         recipient_list = [admin[1] for admin in settings.ADMINS] if settings.ADMINS else ['admin@example.com']
         
         try:
