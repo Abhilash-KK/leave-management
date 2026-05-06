@@ -58,6 +58,31 @@
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
+        }
+
+        /* MOBILE HEADER */
+        .mobile-header {
+            display: none;
+            background: var(--bg-sidebar);
+            color: white;
+            padding: 1rem 1.5rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1001;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
         }
 
         /* SIDEBAR STYLES */
@@ -74,6 +99,7 @@
             color: white;
             z-index: 1000;
             border-right: 1px solid var(--border);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .brand {
@@ -314,6 +340,14 @@
 </head>
 <body class="{% if user.is_authenticated %}authenticated{% endif %}">
     {% if user.is_authenticated %}
+    <div class="mobile-header">
+        <span style="font-weight: 800; font-size: 1.1rem;">Student Leave Hub</span>
+        <button id="menu-toggle" class="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+    
     <aside id="sidebar">
         <a href="{% url 'request_list' %}" class="brand">
             <i class="fas fa-paper-plane"></i>
@@ -440,6 +474,25 @@
                 localStorage.setItem('theme', newTheme);
                 updateIcon(newTheme);
             });
+
+            // Mobile Menu Toggle
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            if (menuToggle) {
+                menuToggle.addEventListener('click', () => {
+                    sidebar.classList.toggle('active');
+                    overlay.classList.toggle('active');
+                });
+            }
+            
+            if (overlay) {
+                overlay.addEventListener('click', () => {
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                });
+            }
         });
     </script>
 </body>
