@@ -4,6 +4,11 @@
 {% block header_title %}System Overview{% endblock %}
 
 {% block content %}
+<div style="margin-bottom: 2.5rem; animation: fadeIn 0.8s ease-out;">
+    <h1 id="dynamic-greeting" style="font-size: 2rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem;">{{ user.username }}!</h1>
+    <p style="color: var(--text-muted); font-size: 1.1rem;">Here is what's happening with the leave requests today.</p>
+</div>
+
 <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; animation: fadeIn 0.8s ease-out;">
     
     <!-- TOTAL REQUESTS (BLUE) -->

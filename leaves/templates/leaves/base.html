@@ -330,6 +330,57 @@
         }
 
         /* ANIMATIONS */
+        /* PULSE ANIMATION */
+        @keyframes pulse-yellow {
+            0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+        }
+
+        .status-badge.pending {
+            animation: pulse-yellow 2s infinite;
+        }
+
+        /* TOAST NOTIFICATIONS */
+        .messages-container {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            pointer-events: none;
+        }
+
+        .toast {
+            pointer-events: auto;
+            min-width: 300px;
+            padding: 1rem 1.5rem;
+            background: var(--bg-card);
+            border-left: 4px solid var(--primary);
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: slideInRight 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transition: all 0.3s ease;
+        }
+
+        .toast.success { border-left-color: var(--success); }
+        .toast.error { border-left-color: var(--danger); }
+        .toast.warning { border-left-color: var(--warning); }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -434,12 +485,15 @@
         {% endif %}
 
         {% if messages %}
+        <div class="messages-container">
             {% for message in messages %}
-                <div style="background: {% if message.tags == 'success' %}#dcfce7{% else %}#fee2e2{% endif %}; color: {% if message.tags == 'success' %}#166534{% else %}#991b1b{% endif %}; padding: 1rem; border-radius: 0.75rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 0.75rem; animation: fadeIn 0.3s ease-in;">
-                    <i class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %}"></i>
-                    {{ message }}
-                </div>
+            <div class="toast {{ message.tags }}">
+                <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}" 
+                   style="color: {% if message.tags == 'success' %}var(--success){% elif message.tags == 'error' %}var(--danger){% else %}var(--warning){% endif %}; font-size: 1.25rem;"></i>
+                <span style="font-weight: 500; font-size: 0.9375rem;">{{ message }}</span>
+            </div>
             {% endfor %}
+        </div>
         {% endif %}
 
         {% block content %}{% endblock %}
@@ -492,6 +546,36 @@
                     sidebar.classList.remove('active');
                     overlay.classList.remove('active');
                 });
+            }
+
+            // DYNAMIC GREETING
+            const greetingEl = document.getElementById('dynamic-greeting');
+            if (greetingEl) {
+                const hour = new Date().getHours();
+                let greeting = "Good Evening";
+                if (hour < 12) greeting = "Good Morning";
+                else if (hour < 17) greeting = "Good Afternoon";
+                greetingEl.prepend(`${greeting}, `);
+            }
+
+            // AUTO-HIDE TOASTS
+            const toasts = document.querySelectorAll('.toast');
+            toasts.forEach(toast => {
+                setTimeout(() => {
+                    toast.style.animation = 'fadeOut 0.5s forwards';
+                    setTimeout(() => toast.remove(), 500);
+                }, 4000);
+            });
+
+            // SMART TAB TITLE
+            const originalTitle = document.title;
+            const pendingBadge = document.querySelector('.status-badge.pending');
+            if (pendingBadge && "{{ user.is_staff }}" === "True") {
+                let showPending = false;
+                setInterval(() => {
+                    document.title = showPending ? "🔔 Action Required!" : originalTitle;
+                    showPending = !showPending;
+                }, 2000);
             }
         });
     </script>

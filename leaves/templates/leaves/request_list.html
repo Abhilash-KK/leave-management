@@ -11,7 +11,7 @@
             
             <!-- Status Badge -->
             <div style="position: absolute; top: 1.5rem; right: 1.5rem;">
-                <span class="status-badge" style="
+                <span class="status-badge {% if request.status == 'Pending' %}pending{% endif %}" style="
                     padding: 0.4rem 0.8rem;
                     border-radius: 2rem;
                     font-size: 0.75rem;
