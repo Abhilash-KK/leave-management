@@ -1,13 +1,35 @@
 {% extends 'leaves/base.html' %}
+{% load static %}
 
 {% block title %}Login - LeaveFlow{% endblock %}
 
 {% block extra_css %}
 <style>
+    /* Full page background styling with overlay and blur */
+    main.auth-page {
+        background: 
+            linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(99, 102, 241, 0.3) 100%),
+            url('{% static "images/academic_campus_bg.png" %}') center/cover no-repeat;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Subtle blur overlay */
+    main.auth-page::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 0;
+    }
+
     .login-container {
         width: 100%;
         max-width: 450px;
         animation: fadeInScale 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        z-index: 1; /* Keep above the blur overlay */
     }
     
     @keyframes fadeInScale {
@@ -16,18 +38,19 @@
     }
 
     .auth-card {
-        background: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.5);
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.6);
         border-radius: 2rem;
         padding: 3.5rem;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 0 40px rgba(99, 102, 241, 0.1);
     }
 
     .brand-logo {
         width: 64px;
         height: 64px;
-        background: var(--primary);
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
         color: white;
         border-radius: 1.25rem;
         display: flex;
@@ -41,41 +64,42 @@
     input {
         width: 100%;
         padding: 0.875rem 1.25rem;
-        background: white;
+        background: rgba(255, 255, 255, 0.9);
         border: 1px solid #e2e8f0;
         border-radius: 1rem;
         font-size: 1rem;
-        transition: all 0.2s;
+        transition: all 0.3s ease;
     }
 
     input:focus {
         outline: none;
         border-color: var(--primary);
-        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        background: #ffffff;
     }
 
     .btn-auth {
         width: 100%;
         padding: 1rem;
-        background: var(--primary);
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
         color: white;
         border: none;
         border-radius: 1rem;
         font-size: 1rem;
         font-weight: 700;
         cursor: pointer;
-        transition: all 0.2s;
+        transition: all 0.3s ease;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 0.75rem;
         margin-top: 1rem;
+        box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.2);
     }
 
     .btn-auth:hover {
-        background: var(--primary-dark);
         transform: translateY(-2px);
-        box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+        box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
     }
 </style>
 {% endblock %}
