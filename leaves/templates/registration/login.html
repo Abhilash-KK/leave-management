@@ -5,13 +5,15 @@
 
 {% block extra_css %}
 <style>
-    /* PURPLE THEME DESIGN SYSTEM */
+    /* LIGHT THEME DESIGN SYSTEM */
     :root {
-        --purple-deep: #1a0b2e;
-        --purple-mid: #2d1b4d;
+        --bg-light: #f8fafc;
+        --text-dark: #0f172a;
+        --text-muted: #64748b;
+        --primary-purple: #4f46e5;
         --accent-gradient: linear-gradient(135deg, #f97316 0%, #ec4899 100%);
-        --glass-bg: rgba(255, 255, 255, 0.05);
-        --glass-border: rgba(255, 255, 255, 0.1);
+        --card-bg: rgba(255, 255, 255, 0.8);
+        --card-border: rgba(255, 255, 255, 1);
     }
 
     #particles-js {
@@ -25,7 +27,9 @@
     }
 
     main.auth-page {
-        background: radial-gradient(circle at top right, #3b0764, var(--purple-deep)) !important;
+        background-color: var(--bg-light) !important;
+        background-image: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0, transparent 50%), 
+                          radial-gradient(at 50% 0%, rgba(168, 85, 247, 0.1) 0, transparent 50%) !important;
         position: relative;
         overflow: hidden;
         display: flex;
@@ -41,14 +45,14 @@
         width: 100%;
         max-width: 1100px;
         min-height: 650px;
-        background: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(25px);
-        -webkit-backdrop-filter: blur(25px);
-        border: 1px solid var(--glass-border);
+        background: var(--card-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--card-border);
         border-radius: 3rem;
         overflow: hidden;
         z-index: 10;
-        box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.6);
+        box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.1);
         animation: fadeInScale 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
@@ -57,15 +61,14 @@
         to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
-    /* Left Branding Side */
     .branding-side {
         flex: 1.2;
         padding: 5rem;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        background: linear-gradient(225deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
-        color: white;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.03) 0%, transparent 100%);
+        color: var(--text-dark);
         position: relative;
     }
 
@@ -75,31 +78,31 @@
         margin-bottom: 1.5rem;
         letter-spacing: -0.04em;
         line-height: 1;
+        color: var(--text-dark);
     }
 
     .branding-side .divider {
         width: 60px;
-        height: 4px;
+        height: 5px;
         background: var(--accent-gradient);
         margin-bottom: 2.5rem;
         border-radius: 2px;
     }
 
-    /* Right Login Side */
     .form-side {
         flex: 0.8;
         padding: 5rem;
-        background: rgba(0, 0, 0, 0.25);
+        background: white;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        border-left: 1px solid var(--glass-border);
+        box-shadow: -10px 0 30px rgba(0,0,0,0.02);
     }
 
     .form-side h2 {
         font-size: 2.5rem;
         font-weight: 800;
-        color: white;
+        color: var(--text-dark);
         margin-bottom: 3rem;
         position: relative;
     }
@@ -110,8 +113,8 @@
         bottom: -10px;
         left: 0;
         width: 30px;
-        height: 3px;
-        background: white;
+        height: 4px;
+        background: var(--primary-purple);
         border-radius: 2px;
     }
 
@@ -121,9 +124,9 @@
 
     .input-group label {
         display: block;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         font-weight: 700;
-        color: rgba(255, 255, 255, 0.6);
+        color: var(--text-muted);
         margin-bottom: 0.75rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
@@ -131,20 +134,20 @@
 
     .input-group input {
         width: 100%;
-        background: rgba(255, 255, 255, 0.07) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        background: #f1f5f9 !important;
+        border: 2px solid transparent !important;
         border-radius: 1.25rem !important;
         padding: 1.1rem 1.5rem !important;
-        color: white !important;
+        color: var(--text-dark) !important;
         font-size: 1rem;
         transition: all 0.3s ease;
     }
 
     .input-group input:focus {
-        background: rgba(255, 255, 255, 0.12) !important;
-        border-color: #f97316 !important;
+        background: white !important;
+        border-color: var(--primary-purple) !important;
         outline: none;
-        box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.2);
+        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
     }
 
     .btn-submit {
@@ -181,13 +184,13 @@
     }
 
     .social-icons a {
-        color: rgba(255, 255, 255, 0.5);
+        color: var(--text-muted);
         font-size: 1.5rem;
         transition: all 0.3s ease;
     }
 
     .social-icons a:hover {
-        color: white;
+        color: var(--primary-purple);
         transform: translateY(-3px);
     }
 
@@ -195,7 +198,7 @@
         .login-wrapper { flex-direction: column; max-width: 500px; }
         .branding-side { padding: 4rem 2rem; text-align: center; align-items: center; }
         .branding-side h1 { font-size: 3rem; }
-        .form-side { width: 100%; padding: 4rem 2rem; border-left: none; border-top: 1px solid var(--glass-border); }
+        .form-side { width: 100%; padding: 4rem 2rem; box-shadow: none; border-top: 1px solid #f1f5f9; }
     }
 </style>
 {% endblock %}
@@ -204,23 +207,23 @@
 <canvas id="particles-js"></canvas>
 
 <div class="login-wrapper">
-    <!-- LEFT SIDE: Branding & Quotes -->
+    <!-- LEFT SIDE -->
     <div class="branding-side">
         <div style="position: absolute; top: 4rem; left: 4rem;">
-            <i class="fas fa-paper-plane" style="font-size: 2.5rem; color: white;"></i>
+            <i class="fas fa-paper-plane" style="font-size: 2.5rem; color: var(--primary-purple);"></i>
         </div>
         <h1>Welcome!</h1>
         <div class="divider"></div>
         
         <div id="quote-container" style="margin-top: 1rem;">
-            <p id="quote-text" style="font-size: 1.2rem; font-style: italic; line-height: 1.8; margin-bottom: 1.5rem; color: rgba(255,255,255,0.9);">"The important thing is not to stop questioning."</p>
-            <p id="quote-author" style="font-size: 0.875rem; font-weight: 800; color: #f97316; text-transform: uppercase; letter-spacing: 0.15em;">— ALBERT EINSTEIN</p>
+            <p id="quote-text" style="font-size: 1.25rem; font-style: italic; line-height: 1.8; margin-bottom: 1.5rem; color: var(--text-dark); font-weight: 500;">"Imagination is more important than knowledge."</p>
+            <p id="quote-author" style="font-size: 0.9rem; font-weight: 800; color: var(--primary-purple); text-transform: uppercase; letter-spacing: 0.2em;">— ALBERT EINSTEIN</p>
         </div>
 
-        <p style="margin-top: 3rem; font-size: 0.9375rem; opacity: 0.6;">Manage your leaves effortlessly with our advanced academic portal.</p>
+        <p style="margin-top: 3rem; font-size: 1rem; color: var(--text-muted);">Manage your leaves effortlessly with our advanced academic portal.</p>
     </div>
 
-    <!-- RIGHT SIDE: Login Form -->
+    <!-- RIGHT SIDE -->
     <div class="form-side">
         <h2>Sign in</h2>
         
@@ -231,7 +234,7 @@
                 <label>{{ field.label }}</label>
                 {{ field }}
                 {% if field.errors %}
-                <p style="color: #fda4af; font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600;">{{ field.errors.0 }}</p>
+                <p style="color: #ef4444; font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600;">{{ field.errors.0 }}</p>
                 {% endif %}
             </div>
             {% endfor %}
@@ -247,10 +250,10 @@
             <a href="#"><i class="fab fa-pinterest-p"></i></a>
         </div>
 
-        <div style="margin-top: 3rem; text-align: center;">
-            <p style="color: rgba(255,255,255,0.4); font-size: 0.875rem;">
+        <div style="margin-top: 3.5rem; text-align: center;">
+            <p style="color: var(--text-muted); font-size: 0.9rem;">
                 Don't have an account? 
-                <a href="{% url 'register' %}" style="color: white; font-weight: 700; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.3);">Create one now</a>
+                <a href="{% url 'register' %}" style="color: var(--primary-purple); font-weight: 800; text-decoration: none; border-bottom: 2px solid rgba(79, 70, 229, 0.2);">Create one now</a>
             </p>
         </div>
     </div>
@@ -277,7 +280,7 @@
     const canvas = document.getElementById('particles-js');
     const ctx = canvas.getContext('2d');
     let particles = [];
-    const particleCount = 70;
+    const particleCount = 60;
 
     class Particle {
         constructor() {
@@ -296,7 +299,7 @@
             if (this.y < 0) this.y = canvas.height;
         }
         draw() {
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+            ctx.fillStyle = 'rgba(79, 70, 229, 0.2)'; // Soft Indigo
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
             ctx.fill();
@@ -322,7 +325,7 @@
                 const dy = particles[i].y - particles[j].y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
                 if (distance < 120) {
-                    ctx.strokeStyle = `rgba(255, 255, 255, ${0.15 - distance/800})`;
+                    ctx.strokeStyle = `rgba(79, 70, 229, ${0.1 - distance/1200})`;
                     ctx.lineWidth = 0.5;
                     ctx.beginPath();
                     ctx.moveTo(particles[i].x, particles[i].y);
