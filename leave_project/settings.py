@@ -83,6 +83,14 @@ DATABASES = {
     )
 }
 
+# Debug database on Render
+if 'RENDER' in os.environ:
+    print(f"DEBUG: Using database engine: {DATABASES['default'].get('ENGINE')}")
+    if 'DATABASE_URL' not in os.environ:
+        print("DEBUG: DATABASE_URL is NOT set in environment variables.")
+    else:
+        print("DEBUG: DATABASE_URL is set.")
+
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
