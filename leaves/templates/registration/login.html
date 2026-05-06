@@ -141,12 +141,40 @@
             </button>
         </form>
 
-        <div style="margin-top: 2.5rem; text-align: center; border-top: 1px solid #f1f5f9; padding-top: 2rem;">
+        <!-- Dynamic Scientist Quote -->
+        <div id="quote-container" style="margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid #f1f5f9; text-align: center;">
+            <p id="quote-text" style="font-size: 0.9rem; font-style: italic; color: #64748b; line-height: 1.6; margin-bottom: 0.75rem;">"Loading inspiration..."</p>
+            <p id="quote-author" style="font-size: 0.75rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.1em;"></p>
+        </div>
+
+        <div style="margin-top: 1.5rem; text-align: center;">
             <p style="color: var(--text-muted); font-size: 0.9375rem;">
                 Don't have an account? 
                 <a href="{% url 'register' %}" style="color: var(--primary); font-weight: 700; text-decoration: none;">Create one now</a>
             </p>
         </div>
+    </div>
+</div>
+
+<script>
+    const quotes = [
+        { text: "The important thing is not to stop questioning. Curiosity has its own reason for existence.", author: "Albert Einstein" },
+        { text: "Science is a way of thinking much more than it is a body of knowledge.", author: "Carl Sagan" },
+        { text: "Nothing in life is to be feared, it is only to be understood.", author: "Marie Curie" },
+        { text: "Somewhere, something incredible is waiting to be known.", author: "Carl Sagan" },
+        { text: "Imagination is more important than knowledge.", author: "Albert Einstein" },
+        { text: "Everything is theoretically impossible, until it is done.", author: "Robert A. Heinlein" },
+        { text: "The good thing about science is that it's true whether or not you believe in it.", author: "Neil deGrasse Tyson" }
+    ];
+
+    function updateQuote() {
+        const quote = quotes[Math.floor(Math.random() * quotes.length)];
+        document.getElementById('quote-text').innerText = `"${quote.text}"`;
+        document.getElementById('quote-author').innerText = `— ${quote.author}`;
+    }
+
+    document.addEventListener('DOMContentLoaded', updateQuote);
+</script>
     </div>
     
     <p style="text-align: center; margin-top: 2rem; color: #94a3b8; font-size: 0.8125rem;">
