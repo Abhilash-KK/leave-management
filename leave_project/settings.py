@@ -29,6 +29,16 @@ DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,.onrender.com').split(',')
 
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
+CSRF_TRUSTED_ORIGINS = [
+    f"https://{host.strip()}" for host in ALLOWED_HOSTS if host.strip() and host.strip() != '*'
+]
+if RENDER_EXTERNAL_HOSTNAME:
+    CSRF_TRUSTED_ORIGINS.append(f'https://{RENDER_EXTERNAL_HOSTNAME}')
+
 
 # Application definition
 
@@ -91,6 +101,13 @@ if 'RENDER' in os.environ:
     else:
         print("DEBUG: DATABASE_URL is set.")
 
+# Configure SSL for Remote MySQL databases (Aiven, PlanetScale, Railway, AWS RDS, etc.)
+if DATABASES['default'].get('ENGINE') == 'django.db.backends.mysql':
+    options = DATABASES['default'].setdefault('OPTIONS', {})
+    if 'ssl' not in options and os.environ.get('MYSQL_SSL', 'true').lower() != 'false':
+        ssl_mode = os.environ.get('MYSQL_SSL_MODE', 'REQUIRED')
+        options['ssl'] = {'ssl_mode': ssl_mode}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -128,7 +145,15 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'leaves', 'static'),
 ]
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/6.0/ref/settings/#default-auto-field

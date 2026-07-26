@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: leave-management
+    runtime: python
+    buildCommand: "./render-build.sh"
+    startCommand: "gunicorn leave_project.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.8
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
