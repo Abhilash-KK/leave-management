@@ -234,12 +234,21 @@
 
     @media (max-width: 1000px) {
         .login-wrapper { flex-direction: column; max-width: 500px; }
-        .branding-side { padding: 4rem 2rem; text-align: center; align-items: center; }
-        .branding-side h1 { font-size: 3rem; }
-        .form-side { width: 100%; padding: 4rem 2rem; box-shadow: none; border-top: 1px solid var(--glass-border); }
+        .branding-side { padding: 3rem 1.5rem; text-align: center; align-items: center; }
+        .branding-side h1 { font-size: 2.75rem; }
+        .form-side { width: 100%; padding: 3rem 1.5rem; box-shadow: none; border-top: 1px solid var(--glass-border); }
         .theme-toggle-auth { top: 1rem; right: 1rem; width: 3rem; height: 3rem; }
     }
+    @media (max-width: 600px) {
+        main.auth-page { padding: 1rem 0.5rem !important; }
+        .login-wrapper { border-radius: 1.5rem; border: none; }
+        .branding-side { padding: 2rem 1.25rem; }
+        .branding-side h1 { font-size: 2.25rem; }
+        .form-side { padding: 2rem 1.25rem; }
+        .theme-toggle-auth { top: 0.75rem; right: 0.75rem; width: 2.5rem; height: 2.5rem; }
+    }
 </style>
+
 {% endblock %}
 
 {% block content %}

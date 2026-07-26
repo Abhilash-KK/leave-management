@@ -3,7 +3,7 @@
 {% block title %}Analytics - Student Leave Hub{% endblock %}
 
 {% block content %}
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; animation: fadeIn 0.6s ease-out;">
+<div class="analytics-grid" style="animation: fadeIn 0.6s ease-out;">
     <!-- Status Distribution Chart -->
     <div class="glass-card">
         <h3 style="margin-bottom: 1.5rem; font-weight: 700; color: var(--text-main);">Leave Status Distribution</h3>
@@ -20,6 +20,24 @@
         </div>
     </div>
 </div>
+
+<style>
+    .analytics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 2rem;
+    }
+    @media (max-width: 640px) {
+        .analytics-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        .glass-card {
+            padding: 1.25rem !important;
+        }
+    }
+</style>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {

@@ -9,13 +9,13 @@
     <p style="color: var(--text-muted); font-size: 1.1rem;">Here is what's happening with the leave requests today.</p>
 </div>
 
-<div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; animation: fadeIn 0.8s ease-out;">
+<div class="stats-grid" style="animation: fadeIn 0.8s ease-out;">
     
     <!-- TOTAL REQUESTS (BLUE) -->
     <div class="stat-card" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; border-radius: 1.5rem; padding: 2rem; position: relative; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);">
         <div style="position: relative; z-index: 2;">
             <div style="font-size: 0.875rem; font-weight: 600; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Total Requests</div>
-            <div style="font-size: 3rem; font-weight: 800;">{{ total_count }}</div>
+            <div class="stat-number" style="font-size: 3rem; font-weight: 800;">{{ total_count }}</div>
         </div>
         <i class="fas fa-file-alt" style="position: absolute; bottom: -10px; right: -10px; font-size: 6rem; opacity: 0.15; transform: rotate(-15deg);"></i>
     </div>
@@ -24,7 +24,7 @@
     <div class="stat-card" style="background: linear-gradient(135deg, #10b981, #047857); color: white; border-radius: 1.5rem; padding: 2rem; position: relative; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);">
         <div style="position: relative; z-index: 2;">
             <div style="font-size: 0.875rem; font-weight: 600; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Approved</div>
-            <div style="font-size: 3rem; font-weight: 800;">{{ approved_count }}</div>
+            <div class="stat-number" style="font-size: 3rem; font-weight: 800;">{{ approved_count }}</div>
         </div>
         <i class="fas fa-check-circle" style="position: absolute; bottom: -10px; right: -10px; font-size: 6rem; opacity: 0.15; transform: rotate(-15deg);"></i>
     </div>
@@ -33,7 +33,7 @@
     <div class="stat-card" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border-radius: 1.5rem; padding: 2rem; position: relative; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(245, 158, 11, 0.3);">
         <div style="position: relative; z-index: 2;">
             <div style="font-size: 0.875rem; font-weight: 600; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Pending</div>
-            <div style="font-size: 3rem; font-weight: 800;">{{ pending_count }}</div>
+            <div class="stat-number" style="font-size: 3rem; font-weight: 800;">{{ pending_count }}</div>
         </div>
         <i class="fas fa-clock" style="position: absolute; bottom: -10px; right: -10px; font-size: 6rem; opacity: 0.15; transform: rotate(-15deg);"></i>
     </div>
@@ -42,7 +42,7 @@
     <div class="stat-card" style="background: linear-gradient(135deg, #ef4444, #b91c1c); color: white; border-radius: 1.5rem; padding: 2rem; position: relative; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.3);">
         <div style="position: relative; z-index: 2;">
             <div style="font-size: 0.875rem; font-weight: 600; opacity: 0.9; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Rejected</div>
-            <div style="font-size: 3rem; font-weight: 800;">{{ rejected_count }}</div>
+            <div class="stat-number" style="font-size: 3rem; font-weight: 800;">{{ rejected_count }}</div>
         </div>
         <i class="fas fa-times-circle" style="position: absolute; bottom: -10px; right: -10px; font-size: 6rem; opacity: 0.15; transform: rotate(-15deg);"></i>
     </div>
@@ -50,33 +50,33 @@
 </div>
 
 <!-- CALENDAR SECTION -->
-<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-top: 3rem; animation: slideUp 0.8s ease-out 0.2s both;">
+<div class="dashboard-content-grid" style="animation: slideUp 0.8s ease-out 0.2s both;">
     <!-- Calendar Card -->
-    <div class="glass-card" style="padding: 2.5rem;">
-        <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 2rem; display: flex; align-items: center; gap: 0.75rem;">
+    <div class="glass-card" style="padding: 2rem;">
+        <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--text-main); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
             <i class="fas fa-calendar-alt" style="color: var(--primary);"></i>
             Leave Schedule
         </h2>
-        <div id="calendar" style="min-height: 600px;"></div>
+        <div id="calendar" style="min-height: 450px;"></div>
     </div>
 
     <!-- On This Day Card -->
-    <div style="display: flex; flex-direction: column; gap: 2rem;">
-        <div class="glass-card" style="padding: 2.5rem; background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);">
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <div class="glass-card" style="padding: 2rem; background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);">
             <h2 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;">
                 <i class="fas fa-history" style="color: var(--primary);"></i>
                 On This Day
             </h2>
             <div id="science-history">
                 <div style="font-size: 0.75rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem;">Scientific Breakthrough</div>
-                <p id="history-text" style="font-size: 1.1rem; color: var(--text-main); line-height: 1.6; margin-bottom: 1.5rem; font-weight: 500;">
+                <p id="history-text" style="font-size: 1.05rem; color: var(--text-main); line-height: 1.6; margin-bottom: 1.25rem; font-weight: 500;">
                     Loading today's history...
                 </p>
                 <div id="history-year" style="font-size: 1.5rem; font-weight: 900; color: var(--text-main); opacity: 0.2;"></div>
             </div>
         </div>
 
-        <div class="glass-card" style="padding: 2rem; border-left: 4px solid var(--success);">
+        <div class="glass-card" style="padding: 1.5rem; border-left: 4px solid var(--success);">
             <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Academic Tip</h3>
             <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.5;">
                 Remember to submit your leave requests at least 48 hours in advance for faster processing!
@@ -100,11 +100,11 @@
         // --- CALENDAR ---
         const calendarEl = document.getElementById('calendar');
         const calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
+            initialView: window.innerWidth < 640 ? 'listWeek' : 'dayGridMonth',
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
-                right: 'dayGridMonth,timeGridWeek'
+                right: window.innerWidth < 640 ? '' : 'dayGridMonth,timeGridWeek'
             },
             events: '{% url "leave_events" %}',
             themeSystem: 'standard',
@@ -122,6 +122,17 @@
 
 
 <style>
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.5rem;
+    }
+    .dashboard-content-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2rem;
+        margin-top: 2.5rem;
+    }
     .stat-card {
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         cursor: default;
@@ -129,9 +140,45 @@
     .stat-card:hover {
         transform: translateY(-5px) scale(1.02);
     }
+    @media (max-width: 992px) {
+        .dashboard-content-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+    }
+    @media (max-width: 640px) {
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.875rem;
+        }
+        .stat-card {
+            padding: 1.25rem !important;
+            border-radius: 1.25rem !important;
+        }
+        .stat-card .stat-number {
+            font-size: 2rem !important;
+        }
+        .stat-card i {
+            font-size: 4rem !important;
+        }
+        .fc .fc-toolbar {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .fc .fc-toolbar-title {
+            font-size: 1.1rem;
+        }
+    }
+    @media (max-width: 400px) {
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+    }
     @keyframes slideUp {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
     }
 </style>
+
 {% endblock %}
